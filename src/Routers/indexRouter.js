@@ -5,4 +5,4 @@ const indexRouter = Router();
 
 indexRouter.use(authRouter);
 
-export default indexRouter
+export default indexRouter;
