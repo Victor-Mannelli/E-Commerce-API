@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 
 dotenv.config();
+
 let mongoClient = undefined;
 async function connectMongo(){
     try {
