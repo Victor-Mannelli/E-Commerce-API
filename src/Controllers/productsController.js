@@ -1,4 +1,18 @@
 import { connectToDb } from "../Database/db.js";
+import express from "express"
+insertinglists()
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get("/temp", async (req,res) => {
+    
+    await connectToDb.collection("meats").insertOne(meat) 
+    await connectToDb.collection("beverage").insertOne(beverage) 
+    await connectToDb.collection("dessert").insertOne(dessert) 
+    await connectToDb.collection("beans").insertOne(beans) 
+    res.sendStatus(201)
+})
 
 const meat = [
     {
