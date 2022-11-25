@@ -7,7 +7,12 @@ export async function ProductsList(req, res) {
 			.find({})
 			.toArray();
 
-		res.status(201).send(products);
+		let result = {meat: [], dessert: [], beverage: [], grains: [], allproducts: products}
+		products.forEach(e => {
+			result[e.type].push(e)
+		});
+
+		res.status(201).send(result);
 	} catch (err) {
 		console.log(err);
 		return res.sendStatus(500);
