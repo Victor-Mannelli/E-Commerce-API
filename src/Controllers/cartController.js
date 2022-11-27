@@ -7,7 +7,6 @@ export async function listProductsInCart(req, res) {
       .collection("cart")
       .find({ userId: user._id })
       .toArray();
-    console.log("Listed products in cart.");
     return res.status(201).send(products); // listed products in cart
   } catch (err) {
     console.log("Error listing products in cart.");
@@ -17,46 +16,52 @@ export async function listProductsInCart(req, res) {
 } // working
 
 export async function addToCart(req, res) {
+  const user = res.locals.user;
+  const product = req.body.product;
+  const quantity = req.body.quantity;
+  let productInCart = undefined;
   try {
-    const product = await connectToDb.collection("cart").find({
-      userId: res.locals.user._id,
-      productId: req.body.product._id,
-    });
-    if (product) {
-      try {
-        await connectToDb.collection("cart").deleteOne({
-          userId: res.locals.user._id,
-          productId: req.body.productId,
-        }); // product deleted from cart
-        console.log("product deleted from cart")
-        res.sendStatus(201);
-      } catch (err) {
-        console.log("Error deleting product from cart.");
-        console.log(err);
-        res.sendStatus(500);
-      }
-    }
-    try {
-      await connectToDb.collection("cart").insertOne({
-        userId: res.locals.user._id,
-        productId: req.body.product._id,
-        productName: req.body.product.name,
-        productType: req.body.product.type,
-        productPrice: req.body.product.price,
-        productImage: req.body.product.image,
-        quantity: req.body.quantity,
-      });
-      console.log("Product added to cart.");
-      return res.sendStatus(201); // product added to cart
-    } catch (err) {
-      console.log("Error adding product to cart.");
-      console.log(err);
-      return res.sendStatus(500);
-    }
+    productInCart = await connectToDb
+      .collection("cart")
+      .find({
+        userId: user._id,
+        productId: product._id,
+      })
+      .toArray();
   } catch (err) {
-    console.log("Error adding product to cart.");
+    console.log("Error checking if product is in cart.");
     console.log(err);
     return res.sendStatus(500);
+  } finally {
+    try {
+      if (productInCart) {
+        await connectToDb.collection("cart").deleteOne({
+          userId: user._id,
+          productId: product._id,
+        }); // product deleted from cart
+      }
+    } catch (err) {
+      console.log("Error deleting product from cart.");
+      console.log(err);
+      return res.sendStatus(500);
+    } finally {
+      try {
+        await connectToDb.collection("cart").insertOne({
+          userId: user._id,
+          productId: product._id,
+          productName: product.name,
+          productType: product.type,
+          productPrice: product.price,
+          productImage: product.image,
+          quantity: quantity,
+        });
+        return res.sendStatus(201); // product added to cart
+      } catch (err) {
+        console.log("Error adding product to cart.");
+        console.log(err);
+        return res.sendStatus(500);
+      }
+    }
   }
 } // working
 
