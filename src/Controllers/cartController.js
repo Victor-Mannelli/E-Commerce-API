@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { connectToDb } from "../Database/db.js";
 
 export async function listProductsInCart(req, res) {
@@ -47,7 +46,7 @@ export async function addToCart(req, res) {
         productImage: req.body.product.image,
         quantity: req.body.quantity,
       });
-      console.log("Added product in cart.");
+      console.log("Product added to cart.");
       return res.sendStatus(201); // product added to cart
     } catch (err) {
       console.log("Error adding product to cart.");
@@ -80,16 +79,3 @@ export async function deleteFromCart(req, res) {
     return res.sendStatus(500);
   }
 } // working
-
-export async function clearCart(req, res) {
-  try {
-    const user = res.locals.user;
-    await connectToDb.collection("cart").deleteMany({ userId: user._id });
-
-    return res.sendStatus(201); // cart cleared
-  } catch (err) {
-    console.log("Error clearing cart.");
-    console.log(err);
-    return res.sendStatus(500);
-  }
-}
