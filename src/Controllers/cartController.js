@@ -83,4 +83,4 @@ export async function deleteFromCart(req, res) {
     console.log(err);
     return res.sendStatus(500);
   }
-} // working
+} 
