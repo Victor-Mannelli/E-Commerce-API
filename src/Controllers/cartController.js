@@ -13,7 +13,7 @@ export async function listProductsInCart(req, res) {
     console.log(err);
     return res.sendStatus(500);
   }
-} // working
+}
 
 export async function addToCart(req, res) {
   const user = res.locals.user;
@@ -63,7 +63,7 @@ export async function addToCart(req, res) {
       }
     }
   }
-} // working
+}
 
 export async function deleteFromCart(req, res) {
   try {
